@@ -18,6 +18,8 @@ intents.members = True
 client = commands.Bot(command_prefix = '.', intents = intents)
 client.remove_command('help')
 
+#this is a comment I am adding to test if the auto pull every 10 mins actually works
+
 #Guild (server) ID
 guild_id = 501576507580219392
 
