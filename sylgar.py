@@ -25,6 +25,9 @@ guild_id = 501576507580219392
 club_officer_id = 504109818382909482
 bots_id = 562386661288443919
 
+#channel IDs
+adventure_channel_id = 890622962544304258
+
 @client.event
 async def on_ready():
     bot_description = discord.Game('Just Swimming | .help')
@@ -96,5 +99,115 @@ async def NewGame(ctx, name, color : discord.Color, game_master : discord.Member
     await guild.create_text_channel(name = world_channel_name, category = category, overwrites = world_overwrites)
     await guild.create_text_channel(name = bot_channel_name, category = category, overwrites = overwrites)
     await guild.create_voice_channel(name = voice_channel_name, category = category, overwrites = overwrites)
+
+###Adventure commands###
+
+@client.command()
+async def atlas(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('Flame slain brings the darkness of night, find the flame that sheds eternal light.')
+        await adventure_channel.send('{} has found the the first cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def torch(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('A great cobbled loop full of mechanical beasts, as Patrick Star would say you should head NorthWeest.')
+        await adventure_channel.send('{} has found the the second cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def journey(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send("You're halfway done through your quest, you deserve a break, find the place where students can snack and rest.")
+        await adventure_channel.send('{} has found the the third cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def tavern(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send("Many before you have reflected at this location. Seek it under an obelisk's shadow.")
+        await adventure_channel.send('{} has found the the fourth cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def rest(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send("Call the underground meeting place what you want: an adventurers' guild, a tavern, what have you - but know this is a place of  great social power.")
+        await adventure_channel.send('{} has found the the fifth cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def nexus(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('Under bulbous illuminators lies a peaceful clearing; many ents and their kin reside here. Here, wizards and artificers study matters of the human race.')
+        await adventure_channel.send('{} has found the the sixth cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def connect(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('The strongest among them come here to pilot the great ships of the fleet.')
+        await adventure_channel.send('{} has found the the seventh cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def wild(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('Congratulations you have found the last cipher! However if you have not tired of your journey yet, there lies one more bonus secret. Be warned this last quest is not for the faint of heart.\nA location of great artifice, often spoken of in hushed tones, a solitary throne that overlooks the grand expanse of the ocean.')
+        await adventure_channel.send('{} has found the the eighth and last cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
+
+@client.command()
+async def rite(ctx):
+    guild = client.get_guild(guild_id)
+    adventure_channel = guild.get_channel(adventure_channel_id)
+    user_name = ctx.author
+    if isinstance(ctx.channel, discord.channel.DMChannel):
+        await ctx.send('Congratulations you have found the final cipher!')
+        await adventure_channel.send('{} has found the the supper secret ninth (and actually last) cipher!'.format(user_name))
+    else:
+        await ctx.message.delete()
+        await ctx.send("Please only use the adventure commands in the bot's DMs")
 
 client.run(token)
