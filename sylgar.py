@@ -389,6 +389,10 @@ async def disclaimer(ctx):
     ]
     await ctx.send(random.choice(disclaimers))
 
+@client.command()
+async def about(ctx):
+    await ctx.send("This bot's github page: https://github.com/sarahalexw/sylgar")
+
 #Adventure commands
 
 @client.command()
