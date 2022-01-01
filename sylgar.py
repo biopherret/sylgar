@@ -246,11 +246,11 @@ async def check_valid_game_name(name : str):
         return False
 
 async def check_valid_description(description : str):
-    '''Checks if game description is less than 100 characters
+    '''Checks if game description is less than 1000 characters
     description: str
     returns bool'''
 
-    if len(description) <= 100:
+    if len(description) <= 1000:
         return True
     else:
         return False
