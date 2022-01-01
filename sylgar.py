@@ -605,7 +605,7 @@ async def add_player(ctx, game_name_w_dashes : str, player : discord.Member):
     game_name = game_name_w_dashes.replace('-', ' ')
     
     if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
+        await ctx.send('Please use the add_player command in the #gm-bot-jail text channel')
     elif game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -627,7 +627,7 @@ async def remove_player(ctx, game_name_w_dashes: str, player : discord.Member):
     game_name = game_name_w_dashes.replace('-', ' ')
     
     if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
+        await ctx.send('Please use the remove_player command in the #gm-bot-jail text channel')
     elif game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -700,6 +700,7 @@ async def see_game_status(ctx, game_name_w_dashes : str):
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
     else:
         message = await get_sus_card(game_name)
+        message += '\nListed on Signup Sheet?: {}'.format(data[game_name]['on_sus'])
         message += '\n\n*Current Players*:'
         for player_id in data[game_name]['player_ids']:
             member = guild.get_member(player_id)
