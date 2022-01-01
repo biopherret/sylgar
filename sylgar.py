@@ -604,9 +604,7 @@ async def add_player(ctx, game_name_w_dashes : str, player : discord.Member):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the add_player command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -626,9 +624,7 @@ async def remove_player(ctx, game_name_w_dashes: str, player : discord.Member):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the remove_player command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -692,9 +688,7 @@ async def see_game_status(ctx, game_name_w_dashes : str):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -712,15 +706,12 @@ async def see_game_status(ctx, game_name_w_dashes : str):
 @commands.has_any_role(game_master_id, club_officer_id)
 async def see_all_games(ctx):
     '''Sends the names of the names of all games in the club'''
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    else:
-        data = await open_json('sign_up_sheet.json')
-        message = 'All Games in the Club:'
-        for game_name in data:
-            message += '\n{}'.format(game_name)
+    data = await open_json('sign_up_sheet.json')
+    message = 'All Games in the Club:'
+    for game_name in data:
+        message += '\n{}'.format(game_name)
 
-        await ctx.send(message)
+    await ctx.send(message)
 
 @client.command()
 @commands.has_any_role(game_master_id, club_officer_id)
@@ -755,9 +746,7 @@ async def edit_game_name(ctx, old_game_name_w_dashes : str, new_game_name_w_dash
     data = await open_json('sign_up_sheet.json')
     old_game_name = old_game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif old_game_name not in data:
+    if old_game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(old_game_name))
     elif author_id != data[old_game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -814,9 +803,7 @@ async def edit_game_listing_status(ctx, game_name_w_dashes : str, on_sus : str):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -839,14 +826,11 @@ async def edit_max_players(ctx, game_name_w_dashes : str, max_players : int):
     game_name_w_dashes: str, the name of the game as it will be written in channels (with dashes)'''
     author_id = ctx.author.id
     is_club_officer = await check_if_club_officer(author_id)
-    guild = client.get_guild(guild_id)
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -868,9 +852,7 @@ async def edit_game_reaction(ctx, game_name_w_dashes : str, reaction):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -893,9 +875,7 @@ async def edit_game_description(ctx, game_name_w_dashes : str, *, description):
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
     
-    if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
-        await ctx.send('Please use the see_game_status command in the #gm-bot-jail text channel')
-    elif game_name not in data:
+    if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
         await ctx.send('Sorry, you can not manage a game for another game master unless you are a club officer.')
@@ -977,7 +957,7 @@ async def remove_game_data(ctx, game_name_w_dashes):
     game_name = game_name_w_dashes.replace('-', ' ')
 
     if ctx.channel.id != officer_bot_channel_id:
-        await ctx.send('Please use the remove_game command in the #gm-bot-jail text channel')
+        await ctx.send('Please use the remove_game command in the #officer-bot-command text channel')
     elif game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     else:
