@@ -340,6 +340,7 @@ async def member(ctx):
     embed = discord.Embed(title = 'Member Commands', description = 'All commands begin with "."')
     embed.add_field(name = '.books', value = 'To get a link to a bunch of 5e Books')
     embed.add_field(name = '.disclaimer', value = 'Get a random disclaimer from a 5e Book')
+    embed.add_field(name = '.about', value = 'Get a link to the github for this bot to see its code')
     await ctx.send(embed = embed)
 
 @help.command()
