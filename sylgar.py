@@ -798,7 +798,8 @@ async def edit_game_name(ctx, old_game_name_w_dashes : str, new_game_name_w_dash
             await ctx.send('{} has been renamed to {}'.format(old_game_name, new_game_name))
         else:
             #send message saying the game was not approved
-            await ctx.send('{} Your edit request has been denied, an officer will message you explaining why and how to resolve the issue.'.format(data[old_game_name]['dm_id'].mention))
+            game_master = guild.get_member(data[old_game_name]['dm_id'])
+            await ctx.send('{} Your edit request has been denied, an officer will message you explaining why and how to resolve the issue.'.format(game_master.mention))
 
 @client.command()
 @commands.has_any_role(game_master_id, club_officer_id)
@@ -908,7 +909,8 @@ async def edit_game_description(ctx, game_name_w_dashes : str, *, description):
                 await update_sus()
                 await ctx.send('The descripton for {} is {}'.format(game_name, description))
             else:
-                await ctx.send('{} Your edit request has been denied, an officer will message you explaining why and how to resolve the issue.'.format(data[game_name]['dm_id'].mention))
+                game_master = guild_id.get_member(data[game_name]['dm_id'])
+                await ctx.send('{} Your edit request has been denied, an officer will message you explaining why and how to resolve the issue.'.format(game_master.mention))
         else:
             await ctx.send('Description must be less than 100 characters.')
 
