@@ -909,7 +909,8 @@ async def edit_game_description(ctx, game_name_w_dashes : str, *, description):
                 await update_sus()
                 await ctx.send('The descripton for {} is {}'.format(game_name, description))
             else:
-                game_master = guild_id.get_member(data[game_name]['dm_id'])
+                guild = client.get_guild(guild_id)
+                game_master = guild.get_member(data[game_name]['dm_id'])
                 await ctx.send('{} Your edit request has been denied, an officer will message you explaining why and how to resolve the issue.'.format(game_master.mention))
         else:
             await ctx.send('Description must be less than 100 characters.')
