@@ -703,7 +703,7 @@ async def see_game_status(ctx, game_name_w_dashes : str):
         message += '\n\n*Current Players*:'
         for player_id in data[game_name]['player_ids']:
             member = guild.get_member(player_id)
-            message += '\n{}'.format(member.mention)
+            message += '\n{}'.format(member.name)
 
         await ctx.send(message)
     
