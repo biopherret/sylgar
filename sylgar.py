@@ -540,10 +540,12 @@ async def create_game(ctx, name : str, on_sus : str, max_players : int, reaction
         bot_channel_name = '{}-bot-jail'.format(name)
         voice_channel_name = '{} Voice'.format(name_w_spaces)
 
-        #Generate officer approval message
-        message = 'New Game Reqest\nName: {}\nListed on sign up sheet: {}\nMax players: {}\nReaction: {}\nGame Master: {}\nDescription: {}'.format(name_w_spaces, on_sus, max_players, reaction, game_master.mention, description)
+        #Generate officer approval message and waiting message
+        approve_message = 'New Game Reqest\nName: {}\nListed on sign up sheet: {}\nMax players: {}\nReaction: {}\nGame Master: {}\nDescription: {}'.format(name_w_spaces, on_sus, max_players, reaction, game_master.mention, description)
+        waiting_message = 'Club officers are reviewing your game. You will be notified once the game has been approved.'
 
-        approved = await officer_approve(ctx, message)
+        await ctx.send(waiting_message)
+        approved = await officer_approve(ctx, approve_message)
         if approved:
             #Creates a new role
             new_role = await guild.create_role(name = name_w_spaces, color = discord.Color.random())
