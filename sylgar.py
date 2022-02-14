@@ -1,6 +1,6 @@
 import discord
 import logging, json, asyncio
-from discord.ext import commands
+#from discord.ext import commands
 from time import time
 import random
 
