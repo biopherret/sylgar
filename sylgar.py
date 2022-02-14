@@ -1029,12 +1029,12 @@ async def on_member_join(user):
     guild = client.get_guild(guild_id)
     new_member_role = guild.get_role(new_member_role_id)
 
-    await guild.get_member(user.id).add_role(new_member_role)
+    await guild.get_member(user.id).add_roles(new_member_role)
     await user.send("Welcome to RPG at UCSB! To be able to access to the rest of the server, make sure to post in introductions, following the format in #welcome")
 
 @client.event
 async def on_message(message):
-    introductions_channel = client.fetch_channel(introductions_channel_id)
+    introductions_channel = await client.fetch_channel(introductions_channel_id)
 
     if message.channel == introductions_channel:
         guild = client.get_guild(guild_id)
@@ -1052,7 +1052,7 @@ async def on_message(message):
             for i in range(len(use_message.reactions)):
                 for user in use_message.reactions[i].users(): #for every user reacting to the message
                     if club_officer_role in guild.get_member(user.id).roles: #if a club officer is reacting
-                        await club_member.add_role(club_member_role)
+                        await club_member.add_roles(club_member_role)
                         await club_member.remove_role(new_member_role)
                         await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
                         break
