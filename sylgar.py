@@ -535,9 +535,9 @@ async def add_event(ctx, event_name : str, event_time : str):
                 datetime.datetime.strptime(event_time, '%m-%d-%Y %I:%M%p')
             except:
                 datetime.datetime.strptime(event_time, '%m/%d/%Y %I:%M%p')
-        data = await open_json('Bot_Info.json')
-        data["event"].append({"date" : event_time, "event-name": event_name})
-        await write_json(data, 'Bot_Info.json')
+    data = await open_json('Bot_Info.json')
+    data["event"].append({"date" : event_time, "event-name": event_name})
+    await write_json(data, 'Bot_Info.json')
 
 @add_event.error
 async def error_add_event(ctx, error):
@@ -1201,6 +1201,8 @@ async def on_ready():
             except:
                 date = datetime.datetime.strptime(date_string, '%m/%d/%Y %I:%M%p')
             if datetime_now > date:
+                print(date)
+                print(datetime_now)
                 embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for **{event_name_list[name_index]}**', 
                     colour = 0Xfdbf32)
                 embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
