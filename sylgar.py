@@ -1047,6 +1047,7 @@ async def on_message(message):
         current_time = time()
         end_time = current_time + 86400 
 
+        break_out_flag = False #use to know when to end the while loop (python doesn't have good built-in syntax for breaking out of nested loops)
         while current_time < end_time: #will watch the message for a day (so officers have a day to react to the message and welcome the new club member)
             use_message = await message.channel.fetch_message(message.id)
             for i in range(len(use_message.reactions)):
@@ -1055,7 +1056,12 @@ async def on_message(message):
                         await club_member.add_roles(club_member_role)
                         await club_member.remove_roles(new_member_role)
                         await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
+                        break_out_flag = True
                         break
+                if break_out_flag == True:
+                    break
+            if break_out_flag == True:
+                break
     await client.process_commands(message)
 
 @client.event
