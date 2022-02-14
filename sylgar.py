@@ -444,7 +444,7 @@ async def add_event(ctx, event_name : str, event_time : str):
 #    elif isinstance(error, commands.UnexpectedQuoteError):
 #        await ctx.send(f'Looks like there was a quote error.\n{error}')
 
-@commands.command()
+@client.command()
 @commands.has_any_role(club_officer_id)
 async def events(ctx):
     if ctx.channel.id != officer_bot_channel_id:
