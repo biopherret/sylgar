@@ -1,10 +1,8 @@
-from distutils import command
 import discord
 import logging, json, asyncio
 from discord.ext import commands
 from time import time
 import random
-import datetime, pytz
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -38,7 +36,6 @@ officer_bot_channel_id = 926625264593682452
 sus_approvals_channel_id = officer_bot_channel_id
 gm_bot_channel_id = 926625351621308466
 introductions_channel_id = 633127328108511262
-officer_channel_id = 704157952948305922
 
 #message IDs
 sus_message_id = 926625686251249715
@@ -399,67 +396,8 @@ async def disclaimer(ctx):
 async def about(ctx):
     await ctx.send("This bot's github page: https://github.com/sarahalexw/sylgar")
 
-@client.command()
-@commands.has_any_role(club_officer_id)
-async def add_event(ctx, event_name : str, event_time : str):
-    try:
-        datetime.datetime.strptime(event_time, '%m-%d-%Y %I:%M%p')
-    except:
-        datetime.datetime.strptime(event_time, '%m/%d/%Y %I:%M%p')
-    if ctx.channel.id != officer_channel_id:
-        await ctx.message.delete()
-        await ctx.send(f'Sorry please do not use this channel for creating events. Please use {client.get_channel(officer_channel_id).mention}', delete_after = 5)
-        return
-    await ctx.reply('*You have 10 minutes to make any edits before the event is submitted*')
-    original_message = ctx.message
-    release = ctx.message.created_at.now(pytz.timezone('US/Pacific')).replace(tzinfo = None) + datetime.timedelta(0,600) # 600secs = 10 minutes
-    while datetime.datetime.now(pytz.timezone('US/Pacific')).replace(tzinfo = None) < release:
-        await asyncio.sleep(1)
-        edit_message_time = original_message.edited_at
-        if not edit_message_time: #if the message was never edited
-            pass
-        else:
-            list_of_messages = ctx.message.content.split('"')
-            event_time = list_of_messages[3]
-            event_name = list_of_messages[1]
-            try:
-                datetime.datetime.strptime(event_time, '%m-%d-%Y %I:%M%p')
-            except:
-                datetime.datetime.strptime(event_time, '%m/%d/%Y %I:%M%p')
-        data = await open_json('Bot_Info.json')
-        data["event"].append({"date" : event_time, "event-name": event_name})
-        await write_json(data, 'Bot_Info.json')
-
-@add_event.error
-async def error_add_event(ctx, error):
-    if isinstance(error, commands.MissingAnyRole):
-        await ctx.send("Sorry you don't have the required Role to use that command, to view your available commands use `.help`")
-    elif isinstance(error, commands.MissingRequiredArgument):
-        if ctx.channel.id != officer_channel_id:
-            await ctx.message.delete()
-            await ctx.send(f'Sorry please do not use this channel for creating event reminders. Please use {client.get_channel(officer_channel_id).mention}', delete_after = 5)
-        else:
-            await ctx.send("Please enter all arguments. To get more information about this command use `.help events`")
-    elif isinstance(error, commands.CommandInvokeError):
-        await ctx.send(f"Sorry I couldn't add that event. Please use the correct format for events. Use `.help events` to get more information.\n{error}")
-    elif isinstance(error, commands.UnexpectedQuoteError):
-        await ctx.send(f'Looks like there was a quote error.\n{error}')
-
-@commands.command()
-@commands.has_any_role(club_officer_id)
-async def events(ctx):
-    if ctx.channel.id != officer_bot_channel_id:
-        await ctx.message.delete()
-        await ctx.send(f'Sorry please do not use this channel for viewing events. Please use {client.get_channel(officer_channel_id).mention}', delete_after = 5)
-        return
-    else:
-        events = await open_json('Bot_Info.json')
-        embed = discord.Embed(title = 'Events', description = '', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc)) 
-        for event in events["event"]:
-            embed.add_field(name = event["event-name"], value = f'Date: {event["date"]}')
-        await ctx.send(embed = embed)
-
 #Adventure commands
+
 @client.command()
 async def atlas(ctx):
     guild = client.get_guild(guild_id)
@@ -1092,11 +1030,11 @@ async def on_member_join(user):
     new_member_role = guild.get_role(new_member_role_id)
 
     await guild.get_member(user.id).add_roles(new_member_role)
-    await user.send("Welcome to RPG at UCSB! To be able to access to the rest of the server, make sure to post in the #introductions channel of the server, following the format in #welcome")
+    await user.send("Welcome to RPG at UCSB! To be able to access to the rest of the server, make sure to post in introductions, following the format in #welcome")
 
 @client.event
 async def on_message(message):
-    introductions_channel = client.fetch_channel(introductions_channel_id)
+    introductions_channel = await client.fetch_channel(introductions_channel_id)
 
     if message.channel == introductions_channel:
         guild = client.get_guild(guild_id)
@@ -1140,7 +1078,6 @@ async def on_ready():
     previous_reacting_users = await find_reacting_users(sus_channel_id, sus_message_id, open_game_reactions)
 
     for i in range(1000000000):
-        ####This section is for the sign up sheet####
         #pull updated data
         data = await open_json('sign_up_sheet.json')
 
