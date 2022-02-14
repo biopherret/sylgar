@@ -1096,7 +1096,7 @@ async def on_member_join(user):
 
 @client.event
 async def on_message(message):
-    introductions_channel = await client.fetch_channel(introductions_channel_id)
+    introductions_channel = client.fetch_channel(introductions_channel_id)
 
     if message.channel == introductions_channel:
         guild = client.get_guild(guild_id)
