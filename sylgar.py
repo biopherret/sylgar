@@ -1032,30 +1032,30 @@ async def on_member_join(user):
     await guild.get_member(user.id).add_roles(new_member_role)
     await user.send("Welcome to RPG at UCSB! To be able to access to the rest of the server, make sure to post in introductions, following the format in #welcome")
 
-@client.event
-async def on_message(message):
-    introductions_channel = await client.fetch_channel(introductions_channel_id)
+#@client.event
+#async def on_message(message):
+#    introductions_channel = await client.fetch_channel(introductions_channel_id)
 
-    if message.channel == introductions_channel:
-        guild = client.get_guild(guild_id)
-        club_member_role = guild.get_role(club_member_role_id)
-        club_officer_role = guild.get_role(club_officer_id)
-        new_member_role = guild.get_role(new_member_role_id)
-        club_user = message.author
-        club_member = guild.get_member(club_user.id)
+#    if message.channel == introductions_channel:
+#        guild = client.get_guild(guild_id)
+#        club_member_role = guild.get_role(club_member_role_id)
+#        club_officer_role = guild.get_role(club_officer_id)
+#        new_member_role = guild.get_role(new_member_role_id)
+#        club_user = message.author
+#        club_member = guild.get_member(club_user.id)
 
-        current_time = time()
-        end_time = current_time + 86400 
+#        current_time = time()
+#        end_time = current_time + 86400 
 
-        while current_time < end_time: #will watch the message for a day (so officers have a day to react to the message and welcome the new club member)
-            use_message = await message.channel.fetch_message(message.id)
-            for i in range(len(use_message.reactions)):
-                for user in use_message.reactions[i].users(): #for every user reacting to the message
-                    if club_officer_role in guild.get_member(user.id).roles: #if a club officer is reacting
-                        await club_member.add_roles(club_member_role)
-                        await club_member.remove_role(new_member_role)
-                        await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
-                        break
+#        while current_time < end_time: #will watch the message for a day (so officers have a day to react to the message and welcome the new club member)
+#            use_message = await message.channel.fetch_message(message.id)
+#            for i in range(len(use_message.reactions)):
+#                for user in use_message.reactions[i].users(): #for every user reacting to the message
+#                    if club_officer_role in guild.get_member(user.id).roles: #if a club officer is reacting
+#                        await club_member.add_roles(club_member_role)
+#                        await club_member.remove_role(new_member_role)
+#                        await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
+#                        break
 
 @client.event
 async def on_member_remove(user):
