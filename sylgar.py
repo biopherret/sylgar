@@ -333,7 +333,6 @@ async def user_confirm(user_id, message):
 #help commands
 @client.group(invoke_without_command = True)
 async def help(ctx):
-    print('the help command has been called')
     embed = discord.Embed(title = 'How to use Sylgar', description = 'Type .help `command` to get more information about the command.')
     embed.add_field(name = 'member', value = 'See all commands available to club members')
     embed.add_field(name = 'GM', value = 'See all commands available to game master, including signup sheet and game management')
@@ -398,6 +397,7 @@ async def about(ctx):
     await ctx.send("This bot's github page: https://github.com/sarahalexw/sylgar")
 
 #Adventure commands
+
 @client.command()
 async def atlas(ctx):
     guild = client.get_guild(guild_id)
