@@ -1179,29 +1179,29 @@ async def on_ready():
         open_game_reactions = await get_open_game_reactions(open_games)
 
         ####This section is for event reminders####
-        event_date_list = []
-        event_name_list = []
-        data = await open_json('Bot_Info.json')
-        for json_event in data['event']:
-            event_date_list.append(json_event["date"])
-            event_name_list.append(json_event["event-name"])
-        officer_channel = client.get_channel(officer_channel_id)
-        datetime_now = datetime.datetime.now(pytz.timezone('US/Pacific')).replace(tzinfo = None)
-        name_index = 0
-        for date_string in event_date_list:
-            try:
-                date = datetime.datetime.strptime(date_string, '%m-%d-%Y %I:%M%p')
-            except:
-                date = datetime.datetime.strptime(date_string, '%m/%d/%Y %I:%M%p')
-            if datetime_now > date:
-                embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for **{event_name_list[name_index]}**', 
-                    colour = 0Xfdbf32)
-                embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
-                await officer_channel.send(embed = embed)
-                data["event"].pop(name_index)
-                await write_json(data, 'Bot_Info.json')
-                break
-            name_index = name_index + 1
+        #event_date_list = []
+        #event_name_list = []
+        #data = await open_json('Bot_Info.json')
+        #for json_event in data['event']:
+        #    event_date_list.append(json_event["date"])
+        #    event_name_list.append(json_event["event-name"])
+        #officer_channel = client.get_channel(officer_channel_id)
+        #datetime_now = datetime.datetime.now(pytz.timezone('US/Pacific')).replace(tzinfo = None)
+        #name_index = 0
+        #for date_string in event_date_list:
+        #    try:
+        #        date = datetime.datetime.strptime(date_string, '%m-%d-%Y %I:%M%p')
+        #    except:
+        #        date = datetime.datetime.strptime(date_string, '%m/%d/%Y %I:%M%p')
+        #    if datetime_now > date:
+        #        embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for **{event_name_list[name_index]}**', 
+        #            colour = 0Xfdbf32)
+        #        embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
+        #        await officer_channel.send(embed = embed)
+        #        data["event"].pop(name_index)
+        #        await write_json(data, 'Bot_Info.json')
+        #        break
+        #    name_index = name_index + 1
 
         await asyncio.sleep(10)
 
