@@ -351,6 +351,7 @@ async def member(ctx):
 @help.command()
 async def officer(ctx):
     embed = discord.Embed(title = 'Officer Commands', description = 'All commands begin with "."')
+    embed.add_field(name = '.add_event', value = 'This command allows you to add event reminders to sylgar. Format: .add_event "event name" "MM/DD/YYYY HH:MMam/pm"')
     embed.add_field(name = '.force_sus_update', value = 'Forces the sign up sheet message to update, use if the sign up sheet file was changed manually.', inline = False)
     embed.add_field(name = '.add_game_data', value = 'Add a game to sign up sheet file (dose not change the server)\nUse Format: .add_game_data <game name with dashes for spaces> <game listing status> <max players> <reaction> <@game master> <@role> <category id> <description>', inline = False)
     embed.add_field(name = '.remove_game_data', value = 'Remove game from sign up sheet file (dose not change the server)\nUse Format: .remove_game_data <game name with dashes for spaces>', inline = False)
