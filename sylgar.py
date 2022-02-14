@@ -1201,8 +1201,6 @@ async def on_ready():
             except:
                 date = datetime.datetime.strptime(date_string, '%m/%d/%Y %I:%M%p')
             if datetime_now > date:
-                print(date)
-                print(datetime_now)
                 embed = discord.Embed(title = f'EVENT REMINDER', description = f'This reminder is for **{event_name_list[name_index]}**', 
                     colour = 0Xfdbf32)
                 embed.set_footer(text = f'Timestamp - {datetime.datetime.now()}')
