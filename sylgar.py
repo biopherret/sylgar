@@ -26,6 +26,8 @@ guild_id = 501576507580219392
 club_officer_id = 504109818382909482
 game_master_id = 501769599876857857
 bots_id = 562386661288443919
+new_member_role_id = 635867613133799424
+club_member_role_id = 633145437418946570
 
 #channel IDs
 adventure_channel_id = 890622962544304258
@@ -33,6 +35,7 @@ sus_channel_id = 926625097383551056
 officer_bot_channel_id = 926625264593682452
 sus_approvals_channel_id = officer_bot_channel_id
 gm_bot_channel_id = 926625351621308466
+introductions_channel_id = 633127328108511262
 
 #message IDs
 sus_message_id = 926625686251249715
@@ -77,11 +80,11 @@ async def reactions_added(previous_reacting_users : dict, current_reacting_users
     #Ingore any keys that have been removed or added
     previous_reacting_users_ignore_key_change = {}
     for name in previous_reacting_users:
-        if name in current_reacting_users: 
+        if name in current_reacting_users:
             previous_reacting_users_ignore_key_change[name] = previous_reacting_users[name]
     current_reacting_users_ignore_key_change = {}
     for name in current_reacting_users:
-        if name in previous_reacting_users: 
+        if name in previous_reacting_users:
             current_reacting_users_ignore_key_change[name] = current_reacting_users[name]
 
     added_users = {}
@@ -90,7 +93,7 @@ async def reactions_added(previous_reacting_users : dict, current_reacting_users
         for user_id in current_reacting_users_ignore_key_change[name]: #for each user
             if user_id not in previous_reacting_users_ignore_key_change[name]: #if a current reacting user had not reacted perviously
                 users.append(user_id)
-        
+
         added_users[name] = users
 
     return added_users
@@ -101,11 +104,11 @@ async def reactions_removed(previous_reacting_users : dict, current_reacting_use
     #Ingore any keys that have been removed or added
     previous_reacting_users_ignore_key_change = {}
     for name in previous_reacting_users:
-        if name in current_reacting_users: 
+        if name in current_reacting_users:
             previous_reacting_users_ignore_key_change[name] = previous_reacting_users[name]
     current_reacting_users_ignore_key_change = {}
     for name in current_reacting_users:
-        if name in previous_reacting_users: 
+        if name in previous_reacting_users:
             current_reacting_users_ignore_key_change[name] = current_reacting_users[name]
 
     removed_users = {}
@@ -114,7 +117,7 @@ async def reactions_removed(previous_reacting_users : dict, current_reacting_use
         for user_id in previous_reacting_users_ignore_key_change[name]: #for each user
             if user_id not in current_reacting_users_ignore_key_change[name]: #if a pervious reacting is not currently reacting
                 users.append(user_id)
-        
+
         removed_users[name] = users
 
     return removed_users
@@ -144,7 +147,7 @@ async def remove_from_game(user_id : int, game_name : str):
     '''Removes player data from sign up sheet file and removes the appropriate role
     user: discord user object, the user being removed from the game
     game: str, name of the game as listed on the sign up sheet'''
-    
+
     guild = client.get_guild(guild_id)
     member = guild.get_member(user_id)
 
@@ -165,7 +168,7 @@ async def get_open_games():
     '''Returns a list of game names which are listed on the sign up sheet and have open spots'''
     data = await open_json('sign_up_sheet.json')
     open_games = []
-    
+
     for game_name in data:
         game_data = data[game_name]
         open_spots = game_data['max_players'] - len(game_data['player_ids'])
@@ -218,7 +221,7 @@ async def update_sus():
     open_games = await get_open_games()
     game_reactions = await get_open_game_reactions(open_games)
     reactions_list = list(game_reactions.values())
-    
+
     sus_channel = client.get_channel(sus_channel_id)
     sus = await sus_channel.fetch_message(sus_message_id)
 
@@ -226,7 +229,7 @@ async def update_sus():
         if str(old_reaction) not in reactions_list:
             async for user in old_reaction.users():
                 await sus.remove_reaction(old_reaction, client.get_guild(guild_id).get_member(user.id))
-    
+
     for reaction in reactions_list: #add reactions for games added to sus
         await sus.add_reaction(reaction)
 
@@ -261,7 +264,7 @@ async def check_valid_emoji(emoji_to_check):
     available_emojis = []
     for emoji in all_server_emojis:
         available_emojis.append(str(emoji))
-    
+
     data = await open_json('sign_up_sheet.json')
 
     for game_name in data:
@@ -302,7 +305,7 @@ async def officer_approve(ctx, message : str):
             return True
         elif use_message.reactions[1].count > 1:
             return False
-    
+
     return False
 
 async def user_confirm(user_id, message):
@@ -324,7 +327,7 @@ async def user_confirm(user_id, message):
             return True
         elif use_message.reactions[1].count > 1:
             return False
-    
+
     return False
 
 #help commands
@@ -533,7 +536,7 @@ async def create_game(ctx, name : str, on_sus : str, max_players : int, reaction
         await ctx.send('Emoji must be a custom server emoji and must not be used by another game.')
     else:
         guild = ctx.guild
-        
+
         #generate channel names (which cannot contian spaces)
         name_w_spaces = name.replace('-', ' ')
         world_channel_name = '{}-world-info'.format(name)
@@ -583,8 +586,8 @@ async def create_game(ctx, name : str, on_sus : str, max_players : int, reaction
                 'max_players': int(max_players),
                 'role_id': new_role.id,
                 'category': category.id,
-                'description': description, 
-                'reaction': reaction, 
+                'description': description,
+                'reaction': reaction,
                 'player_ids': []}
             data[name_w_spaces] = game_data
 
@@ -592,7 +595,7 @@ async def create_game(ctx, name : str, on_sus : str, max_players : int, reaction
 
             #send message confinming game was added
             await ctx.send('{} Your game has been approved and added to the discord.'.format(game_master.mention))
-        
+
             #update the sign up sheet message
             await update_sus()
         else:
@@ -610,7 +613,7 @@ async def add_player(ctx, game_name_w_dashes : str, player : discord.Member):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -630,7 +633,7 @@ async def remove_player(ctx, game_name_w_dashes: str, player : discord.Member):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -650,7 +653,7 @@ async def remove_game(ctx, game_name_w_dashes : str):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if (ctx.channel.id != gm_bot_channel_id) and (ctx.channel.id != officer_bot_channel_id):
         await ctx.send('Please use the remove_game command in the #gm-bot-jail text channel')
     elif game_name not in data:
@@ -663,11 +666,11 @@ async def remove_game(ctx, game_name_w_dashes : str):
         #generate confermation message
         message = 'You, or a club officer, have requested that your game be removed, which will remove the role and all channels for your game. Please react below to confirm (or deny) this action; once you confirm this cannot be undone. This message will timeout after 1 hour and automatically deny the request.'
         confirmed = await  user_confirm(game_master_id, message)
-        if confirmed: 
+        if confirmed:
             #remove data from json
             del data[game_name]
             await write_json(data, 'sign_up_sheet.json')
-            
+
             await update_sus()
 
             #delete channels and category
@@ -676,7 +679,7 @@ async def remove_game(ctx, game_name_w_dashes : str):
             for channel in channels:
                 await channel.delete()
             await category.delete()
-            
+
             role = guild.get_role(game_data['role_id'])
             await role.delete()
             await ctx.send('{} has been removed from the server'.format(game_name))
@@ -694,7 +697,7 @@ async def see_game_status(ctx, game_name_w_dashes : str):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -708,7 +711,7 @@ async def see_game_status(ctx, game_name_w_dashes : str):
             message += '\n{}'.format(member.name)
 
         await ctx.send(message)
-    
+
 @client.command()
 @commands.has_any_role(game_master_id, club_officer_id)
 async def see_all_games(ctx):
@@ -728,7 +731,7 @@ async def see_available_emojis(ctx):
     available_emojis = []
     for emoji in all_server_emojis:
         available_emojis.append(str(emoji))
-    
+
     data = await open_json('sign_up_sheet.json')
 
     for game_name in data:
@@ -740,7 +743,7 @@ async def see_available_emojis(ctx):
         message += emoji
 
     await ctx.send(message)
-            
+
 @client.command()
 @commands.has_any_role(game_master_id, club_officer_id)
 async def edit_game_name(ctx, old_game_name_w_dashes : str, new_game_name_w_dashes : str):
@@ -752,7 +755,7 @@ async def edit_game_name(ctx, old_game_name_w_dashes : str, new_game_name_w_dash
 
     data = await open_json('sign_up_sheet.json')
     old_game_name = old_game_name_w_dashes.replace('-', ' ')
-    
+
     if old_game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(old_game_name))
     elif author_id != data[old_game_name]['dm_id'] and not is_club_officer:
@@ -786,12 +789,12 @@ async def edit_game_name(ctx, old_game_name_w_dashes : str, new_game_name_w_dash
 
             role = guild.get_role(game_data['role_id'])
             await role.edit(name = new_game_name)
-            
+
             data[new_game_name] = data.pop(old_game_name)
             await write_json(data, 'sign_up_sheet.json')
 
             await update_sus()
-            
+
             await ctx.send('{} has been renamed to {}'.format(old_game_name, new_game_name))
         else:
             #send message saying the game was not approved
@@ -809,7 +812,7 @@ async def edit_game_listing_status(ctx, game_name_w_dashes : str, on_sus : str):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -836,7 +839,7 @@ async def edit_max_players(ctx, game_name_w_dashes : str, max_players : int):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -858,7 +861,7 @@ async def edit_game_reaction(ctx, game_name_w_dashes : str, reaction):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -872,7 +875,7 @@ async def edit_game_reaction(ctx, game_name_w_dashes : str, reaction):
             await ctx.send('The reaction emoji for {} is {}'.format(game_name, reaction))
         else:
             await ctx.send('Emoji must be a custom server emoji and must not be used by another game.')
-            
+
 @client.command()
 @commands.has_any_role(game_master_id, club_officer_id)
 async def edit_game_description(ctx, game_name_w_dashes : str, *, description):
@@ -881,7 +884,7 @@ async def edit_game_description(ctx, game_name_w_dashes : str, *, description):
 
     data = await open_json('sign_up_sheet.json')
     game_name = game_name_w_dashes.replace('-', ' ')
-    
+
     if game_name not in data:
         await ctx.send('{} is not an existing game. If the game exists on the server but not in the sign up sheet you may use .add_game_data to add the game data to the sheet.'.format(game_name))
     elif author_id != data[game_name]['dm_id'] and not is_club_officer:
@@ -919,7 +922,7 @@ async def add_game_data(ctx, game_name, on_sus, max_players, reaction, game_mast
     max_players: int, max_number of players that can sign up for the game
     description: str, game description which should show on the sign up sheet
     reaction: str, emoji id, must be a emoji custom to the server, emoji used for reaction add
-    role: the role of the game 
+    role: the role of the game
     game_master: str, @user, game master of the game'''
     is_valid_name = await check_valid_game_name(game_name)
     is_valid_description = await check_valid_description(description)
@@ -933,7 +936,7 @@ async def add_game_data(ctx, game_name, on_sus, max_players, reaction, game_mast
         await ctx.send('Emoji must be a custom server emoji and must not be used by another game.')
     else:
         name_w_spaces = game_name.replace('-', ' ')
-    
+
         #Adds new game to sign_up_sheet.json
         data = await open_json('sign_up_sheet.json')
         game_data = {'on_sus': on_sus,
@@ -941,13 +944,13 @@ async def add_game_data(ctx, game_name, on_sus, max_players, reaction, game_mast
                 'max_players': int(max_players),
                 'role_id': role.id,
                 'category': category_id,
-                'description': description, 
-                'reaction': reaction, 
+                'description': description,
+                'reaction': reaction,
                 'player_ids': []}
         data[name_w_spaces] = game_data
 
         await write_json(data, 'sign_up_sheet.json')
-        
+
         #update the sign up sheet message
         await update_sus()
 
@@ -1022,6 +1025,44 @@ async def remove_player_data(ctx, game_name_w_dashes, member : discord.Member):
             await ctx.send('{} has been added to the game data for {}'.format(member.mention, game_name))
 
 @client.event
+async def on_member_join(user):
+    guild = client.get_guild(guild_id)
+    new_member_role = guild.get_role(new_member_role_id)
+
+    await guild.get_member(user.id).add_role(new_member_role)
+    await user.send("Welcome to RPG at UCSB! To be able to access to the rest of the server, make sure to post in introductions, following the format in #welcome")
+
+@client.event
+async def on_message(message):
+    introductions_channel = client.fetch_channel(introductions_channel_id)
+
+    if message.channel == introductions_channel:
+        guild = client.get_guild(guild_id)
+        club_member_role = guild.get_role(club_member_role_id)
+        club_officer_role = guild.get_role(club_officer_id)
+        new_member_role = guild.get_role(new_member_role_id)
+        club_user = message.author
+        club_member = guild.get_member(club_user.id)
+
+        current_time = time()
+        end_time = current_time + 86400 
+
+        while current_time < end_time: #will watch the message for a day (so officers have a day to react to the message and welcome the new club member)
+            use_message = await message.channel.fetch_message(message.id)
+            for i in range(len(use_message.reactions)):
+                for user in use_message.reactions[i].users(): #for every user reacting to the message
+                    if club_officer_role in guild.get_member(user.id).roles: #if a club officer is reacting
+                        await club_member.add_role(club_member_role)
+                        await club_member.remove_role(new_member_role)
+                        await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
+                        break
+
+@client.event
+async def on_member_remove(user):
+    channel = client.get_channel(officer_bot_channel_id)
+    await channel.send('Oh no! Looks like {} has left the server :('.format(user))
+
+@client.event
 async def on_ready():
     bot_description = discord.Game('Just Swimming | .help')
     await client.change_presence(activity = bot_description)
@@ -1054,9 +1095,9 @@ async def on_ready():
                     await client.get_user(user_id).send('You are allready a player in {}, and can not sign up for it again.\nIf you would like to remove yourself from the game, you may remove the reaction you just made.'.format(game_name))
                 elif user_id == game_data['dm_id']:
                     await client.get_user(user_id).send('You are the GM of {} and can not sign up for it. If you are geting this message in error, please contact a club officer.'.format(game_name))
-                else: 
+                else:
                     await add_to_game(user_id, game_name)
-        
+
         for game_name in players_dropped: #for each game that lost players
             for user_id in players_dropped[game_name]: #for each player removed from game
                 game_data = data[game_name]
@@ -1073,7 +1114,7 @@ async def on_ready():
         #get reactions and names of all games in sign up sheet doc
         open_games = await get_open_games()
         open_game_reactions = await get_open_game_reactions(open_games)
-                      
+
         await asyncio.sleep(10)
 
 client.run(token)
