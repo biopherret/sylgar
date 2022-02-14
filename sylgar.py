@@ -1053,7 +1053,7 @@ async def on_message(message):
                 async for user in use_message.reactions[i].users(): #for every user reacting to the message
                     if club_officer_role in guild.get_member(user.id).roles: #if a club officer is reacting
                         await club_member.add_roles(club_member_role)
-                        await club_member.remove_role(new_member_role)
+                        await club_member.remove_roles(new_member_role)
                         await club_user.send("Thank's for introducing yourself in RPG at UCSB! You now have access to the rest of the server, including the #sign-up-sheet where you can find games that are looking for players.")
                         break
     await client.process_commands(message)
