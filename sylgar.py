@@ -3,7 +3,7 @@ import logging, json, asyncio
 from discord.ext import commands
 from time import time
 import random
-import datetime, pytz
+#import datetime, pytz
 
 logger = logging.getLogger('discord')
 logger.setLevel(logging.DEBUG)
@@ -444,19 +444,19 @@ async def add_event(ctx, event_name : str, event_time : str):
 #    elif isinstance(error, commands.UnexpectedQuoteError):
 #        await ctx.send(f'Looks like there was a quote error.\n{error}')
 
-@client.command()
-@commands.has_any_role(club_officer_id)
-async def events(ctx):
-    if ctx.channel.id != officer_bot_channel_id:
-        await ctx.message.delete()
-        await ctx.send(f'Sorry please do not use this channel for viewing events. Please use {client.get_channel(officer_channel_id).mention}', delete_after = 5)
-        return
-    else:
-        events = await open_json('Bot_Info.json')
-        embed = discord.Embed(title = 'Events', description = '', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc)) 
-        for event in events["event"]:
-            embed.add_field(name = event["event-name"], value = f'Date: {event["date"]}')
-        await ctx.send(embed = embed)
+#@client.command()
+#@commands.has_any_role(club_officer_id)
+#async def events(ctx):
+#    if ctx.channel.id != officer_bot_channel_id:
+#        await ctx.message.delete()
+#        await ctx.send(f'Sorry please do not use this channel for viewing events. Please use {client.get_channel(officer_channel_id).mention}', delete_after = 5)
+#        return
+#    else:
+#        events = await open_json('Bot_Info.json')
+#        embed = discord.Embed(title = 'Events', description = '', colour = 0X003560, timestamp = datetime.datetime.now(datetime.timezone.utc)) 
+#        for event in events["event"]:
+#            embed.add_field(name = event["event-name"], value = f'Date: {event["date"]}')
+#        await ctx.send(embed = embed)
 
 #Adventure commands
 @client.command()
